@@ -12,7 +12,7 @@ fun main() {
     DependencyInjector.addDependency(Resourcer::class, ResourcerImpl())
 
     val resourcer = DependencyInjector.getDependency<Resourcer>(Resourcer::class)
-    val inputStream: InputStream = File(resourcer.getResourceURI("/input/input.txt")).inputStream()
+    val inputStream: InputStream = File(resourcer.getResourceURI("/day1/input.txt")).inputStream()
 
     val maxCalories = intArrayOf(0, 0, 0)
     var calories = 0
