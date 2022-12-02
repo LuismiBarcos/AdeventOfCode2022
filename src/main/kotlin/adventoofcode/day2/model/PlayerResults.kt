@@ -35,3 +35,14 @@ enum class PlayerResults(val score: Int) {
     LOSE(0);
 }
 
+enum class PlayerInstructions(val letter: String) {
+    WIN("Z"),
+    DRAW("Y"),
+    LOSE("X");
+
+    companion object {
+        private val map = PlayerInstructions.values().associateBy { it.letter }
+        fun fromLetter(letter: String) = map[letter]!!
+    }
+}
+
