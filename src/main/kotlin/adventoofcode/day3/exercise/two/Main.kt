@@ -1,5 +1,7 @@
 package adventoofcode.day3.exercise.two
 
+import adventoofcode.day3.calculator.business.LetterCalculatorImpl
+import adventoofcode.day3.calculator.contracts.LetterCalculator
 import adventoofcode.day3.dependency.injector.DependencyInjector
 import adventoofcode.day3.model.Alphabet
 import adventoofcode.day3.resourcer.business.ResourcerImpl
@@ -11,29 +13,31 @@ const val NUMBER_OF_LINES = 3
 fun main() {
     // Inject dependencies
     DependencyInjector.addDependency(Resourcer::class, ResourcerImpl())
+    DependencyInjector.addDependency(LetterCalculator::class, LetterCalculatorImpl())
 
     val resourcer = DependencyInjector.getDependency<Resourcer>(Resourcer::class)
-    val resourceURI = resourcer.getResourceURI("/day3/input.txt")
+    val letterCalculator = DependencyInjector.getDependency<LetterCalculator>(LetterCalculator::class)
 
+    val resourceURI = resourcer.getResourceURI("/day3/input.txt")
 
     val groupOfLines = mutableListOf<String>()
     var result = 0
     File(resourceURI).bufferedReader().forEachLine {
         groupOfLines.add(it)
         if(groupOfLines.size >= NUMBER_OF_LINES) {
-            val firstLine = groupOfLines[0]
-            val secondLine = groupOfLines[1]
-            val thirdLine = groupOfLines[2]
+            val repeatedLetter =
+                groupOfLines
+                    .first()
+                    .find { char -> //find first matching
+                        groupOfLines
+                            .drop(1)
+                            .map { line -> line.contains(char) }
+                            .all { b -> b } //all lines should contain the char
+                    }
 
-            val repeatedLetter = firstLine.find { c ->
-                secondLine.contains(c) && thirdLine.contains(c)
-            }
-
-            result += calculateLetterValue(Alphabet.fromLetter(repeatedLetter!!), repeatedLetter)
+            result += letterCalculator.calculateLetterValue(Alphabet.fromLetter(repeatedLetter!!), repeatedLetter)
+            groupOfLines.removeAll(groupOfLines)
         }
     }
     println("Final result $result")
 }
-
-private fun calculateLetterValue(letter: Alphabet, originalChar: Char): Int =
-    letter.getNaturalOrdinal() + if (originalChar.isUpperCase()) Alphabet.values().size else 0
