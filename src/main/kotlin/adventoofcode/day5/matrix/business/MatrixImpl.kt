@@ -19,6 +19,16 @@ class MatrixImpl: Matrix {
         }
     }
 
+    override fun moveKeepingOrder(totalMoves: Int, sourceColumn: Int, endColumn: Int) {
+        val charsToMove = mutableListOf<Char>()
+        for (i in 0 until totalMoves) {
+            charsToMove.add(matrix[sourceColumn]?.removeLast() ?: throw IllegalAccessError())
+        }
+        charsToMove.reversed().forEach {
+            matrix[endColumn]?.addLast(it)
+        }
+    }
+
     override fun getTopOfEachStack(): String = matrix.keys
         .sorted()
         .map {

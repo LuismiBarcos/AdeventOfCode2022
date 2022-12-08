@@ -5,5 +5,7 @@ interface Matrix {
 
     fun move(totalMoves: Int, sourceColumn: Int, endColumn: Int)
 
+    fun moveKeepingOrder(totalMoves: Int, sourceColumn: Int, endColumn: Int)
+
     fun getTopOfEachStack(): String
 }
